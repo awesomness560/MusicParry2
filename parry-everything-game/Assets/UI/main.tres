@@ -1,0 +1,6 @@
+[gd_resource type="Theme" format=3 uid="uid://d4gw30sj2lxfn"]
+
+[ext_resource type="FontFile" uid="uid://by1tnro78g172" path="res://Assets/UI/Kanit-Regular.ttf" id="1_hgp8c"]
+
+[resource]
+Label/fonts/font = ExtResource("1_hgp8c")

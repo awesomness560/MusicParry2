@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b5d2dfc2alph3"]
+
+[ext_resource type="Script" uid="uid://c8tr4bxobjg5e" path="res://Singletons/style.gd" id="1_4jh02"]
+
+[node name="Style" type="Node" unique_id=1093976379]
+script = ExtResource("1_4jh02")

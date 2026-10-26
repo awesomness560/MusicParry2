@@ -4,9 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b55p6httihlb1" path="res://Assets/prototypeTexture2.png" id="2_h2yge"]
 [ext_resource type="PackedScene" uid="uid://cdltdlvu3ok6r" path="res://Player/player.tscn" id="3_h2yge"]
 [ext_resource type="Texture2D" uid="uid://c463ifydem1d6" path="res://Assets/citrus_orchard_road_puresky_4k.exr" id="4_1bvp3"]
-[ext_resource type="AudioStream" uid="uid://8sogqgrivup2" path="res://Assets/Sounds/itsgoingdownnow.mp3" id="5_lquwl"]
-[ext_resource type="PackedScene" uid="uid://1b0jwujo5mdm" path="res://Enemies/Laser/laser_enemy.tscn" id="6_7mycd"]
-[ext_resource type="Script" uid="uid://b6xdr0uvh70xn" path="res://Misc/Resources/parryResource.gd" id="7_272bh"]
+[ext_resource type="PackedScene" uid="uid://bbo2okjvvlag1" path="res://Enemies/Dummy/dummy_enemy.tscn" id="5_lquwl"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("4_1bvp3")
@@ -39,55 +37,10 @@ albedo_texture = ExtResource("2_h2yge")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kek77"]
 
-[sub_resource type="Resource" id="Resource_272bh"]
-resource_local_to_scene = true
-script = ExtResource("7_272bh")
-damage = 20.0
-perfectParryWindow = 0.2
-normalParryWindow = 0.4
-normalParryPoints = 50.0
-perfectParryPoints = 100.0
-metadata/_custom_type_script = "uid://b6xdr0uvh70xn"
-
-[sub_resource type="Resource" id="Resource_5vw27"]
-resource_local_to_scene = true
-script = ExtResource("7_272bh")
-damage = 20.0
-perfectParryWindow = 0.2
-normalParryWindow = 0.4
-normalParryPoints = 50.0
-perfectParryPoints = 100.0
-metadata/_custom_type_script = "uid://b6xdr0uvh70xn"
-
-[sub_resource type="Resource" id="Resource_kek77"]
-resource_local_to_scene = true
-script = ExtResource("7_272bh")
-damage = 20.0
-perfectParryWindow = 0.2
-normalParryWindow = 0.4
-normalParryPoints = 50.0
-perfectParryPoints = 100.0
-metadata/_custom_type_script = "uid://b6xdr0uvh70xn"
-
-[sub_resource type="Resource" id="Resource_4c57u"]
-resource_local_to_scene = true
-script = ExtResource("7_272bh")
-damage = 20.0
-perfectParryWindow = 0.2
-normalParryWindow = 0.4
-normalParryPoints = 50.0
-perfectParryPoints = 100.0
-metadata/_custom_type_script = "uid://b6xdr0uvh70xn"
-
 [node name="Main" type="Node3D" unique_id=663778735]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=328513810]
 environment = SubResource("Environment_272bh")
-
-[node name="Music" type="AudioStreamPlayer" parent="." unique_id=2024745931]
-stream = ExtResource("5_lquwl")
-volume_db = -16.888
-autoplay = true
 
 [node name="Player" parent="." unique_id=559422446 instance=ExtResource("3_h2yge")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2997768, 13.410364)
@@ -152,18 +105,14 @@ surface_material_override/0 = SubResource("StandardMaterial3D_lquwl")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor5/StaticBody3D" unique_id=1612006788]
 shape = SubResource("BoxShape3D_7mycd")
 
-[node name="LaserEnemy" parent="." unique_id=1303688957 instance=ExtResource("6_7mycd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.646812, 5.5750523, -57.417747)
-parryResource = SubResource("Resource_272bh")
+[node name="DummyEnemy" parent="." unique_id=356644323 instance=ExtResource("5_lquwl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5716555, 1.6864021, 0)
 
-[node name="LaserEnemy3" parent="." unique_id=1584242521 instance=ExtResource("6_7mycd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.607315, 5.5750523, -38.83258)
-parryResource = SubResource("Resource_5vw27")
+[node name="DummyEnemy2" parent="." unique_id=146428545 instance=ExtResource("5_lquwl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4698527, 1.6864021, 0)
 
-[node name="LaserEnemy2" parent="." unique_id=1312958583 instance=ExtResource("6_7mycd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.995386, 5.5750523, -132.77379)
-parryResource = SubResource("Resource_kek77")
+[node name="DummyEnemy3" parent="." unique_id=760701856 instance=ExtResource("5_lquwl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4698527, 1.6864021, -6.306363)
 
-[node name="LaserEnemy4" parent="." unique_id=1494507525 instance=ExtResource("6_7mycd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.995386, 5.5750523, -196.92441)
-parryResource = SubResource("Resource_4c57u")
+[node name="DummyEnemy4" parent="." unique_id=194841100 instance=ExtResource("5_lquwl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.691318, 1.6864021, -6.306363)

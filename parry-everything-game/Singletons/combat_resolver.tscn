@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://boiuwaisko8b6"]
+
+[ext_resource type="Script" uid="uid://dxwbxfb87rrfw" path="res://Singletons/combat_resolver.gd" id="1_61i51"]
+
+[node name="CombatResolver" type="Node" unique_id=57864256]
+script = ExtResource("1_61i51")

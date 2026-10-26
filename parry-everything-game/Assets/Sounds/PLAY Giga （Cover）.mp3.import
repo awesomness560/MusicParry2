@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://svo77eoqivya"
+path="res://.godot/imported/PLAY Giga （Cover）.mp3-e33f17639b7cdf623f590770de5f2df3.mp3str"
+
+[deps]
+
+source_file="res://Assets/Sounds/PLAY Giga （Cover）.mp3"
+dest_files=["res://.godot/imported/PLAY Giga （Cover）.mp3-e33f17639b7cdf623f590770de5f2df3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

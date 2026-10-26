@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://btp3h6fxhjrh3"]
+
+[ext_resource type="Script" uid="uid://cxmbsqx5vl0o3" path="res://Player/UI/style_manager.gd" id="1_7jyyq"]
+[ext_resource type="Shader" uid="uid://57vvvbhdth6b" path="res://Assets/Shaders/style_meter.gdshader" id="1_13lmr"]
+[ext_resource type="Theme" uid="uid://d4gw30sj2lxfn" path="res://Assets/UI/main.tres" id="2_85nex"]
+[ext_resource type="Script" uid="uid://cu6516xrrg0sb" path="res://Player/UI/style_meter.gd" id="2_o0dat"]
+[ext_resource type="FontFile" uid="uid://c4r6t74eki7bg" path="res://Assets/UI/Kanit-ExtraBoldItalic.ttf" id="3_as2px"]
+[ext_resource type="Script" uid="uid://843gxulespo" path="res://Player/UI/style_feed.gd" id="4_as2px"]
+[ext_resource type="Script" uid="uid://ilbtru2gcteu" path="res://Player/UI/rank_display.gd" id="4_lx3wo"]
+[ext_resource type="Shader" uid="uid://dwd4oy22l40wd" path="res://Assets/Shaders/shatter.gdshader" id="5_py6qb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qg41d"]
+shader = ExtResource("1_13lmr")
+shader_parameter/rect_size = Vector2(40, 260)
+shader_parameter/fill = 0.6
+shader_parameter/trail = 0.6
+shader_parameter/spark = 0.0
+shader_parameter/fill_color = Color(0.8056769, 0.8338902, 0.825765, 1)
+shader_parameter/gain_color = Color(1, 1, 1, 1)
+shader_parameter/track_color = Color(0.12, 0.12, 0.12, 0.85)
+shader_parameter/border_color = Color(0.02, 0.02, 0.02, 1)
+shader_parameter/spark_color = Color(1, 0.95, 0.8, 1)
+shader_parameter/warning_color = Color(1, 0.25, 0.2, 1)
+shader_parameter/warning = 0.0
+shader_parameter/margin = 7.326
+shader_parameter/border_out = -0.022
+shader_parameter/border_in = 1.5
+shader_parameter/border_vary = 2.0
+shader_parameter/border_scale = 0.06
+shader_parameter/border_seed = 0.0
+shader_parameter/spark_line = 2.0
+shader_parameter/spark_reach = 1.6
+shader_parameter/spark_height = 10.0
+
+[node name="Style" type="Control" unique_id=1809269195 node_paths=PackedStringArray("meter", "feed", "rank_display", "pulse_targets")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_7jyyq")
+meter = NodePath("StyleMeter")
+feed = NodePath("StyleFeed")
+rank_display = NodePath("RankDisplay")
+pulse_targets = [NodePath("StyleMeter"), NodePath("RankDisplay")]
+pulse_scale = null
+pulse_sharpness = null
+tilt_degrees = null
+hue_shift = null
+
+[node name="StyleMeter" type="ColorRect" parent="." unique_id=1253884038]
+material = SubResource("ShaderMaterial_qg41d")
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -136.0
+offset_top = 29.000015
+offset_right = -107.0564
+offset_bottom = 205.55598
+grow_horizontal = 0
+rotation = -0.26529005
+pivot_offset_ratio = Vector2(0.5, 0.5)
+script = ExtResource("2_o0dat")
+
+[node name="StyleFeed" type="Control" parent="." unique_id=281609537 node_paths=PackedStringArray("bar")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -336.0
+offset_top = 262.0
+offset_right = -141.0
+offset_bottom = 416.0
+grow_horizontal = 0
+script = ExtResource("4_as2px")
+bar = NodePath("../StyleMeter")
+
+[node name="RankDisplay" type="Control" parent="." unique_id=959930582 node_paths=PackedStringArray("letter")]
+anchors_preset = 0
+offset_left = 1049.0
+offset_top = 21.0
+offset_right = 1163.0
+offset_bottom = 118.0
+script = ExtResource("4_lx3wo")
+letter = NodePath("Rank")
+shatter_shader = ExtResource("5_py6qb")
+
+[node name="Rank" type="Label" parent="RankDisplay" unique_id=1872147724]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -114.0
+offset_right = -54.0
+offset_bottom = 90.0
+grow_horizontal = 0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme = ExtResource("2_85nex")
+theme_override_colors/font_color = Color(0.8039216, 0.8352941, 0.827451, 1)
+theme_override_fonts/font = ExtResource("3_as2px")
+theme_override_font_sizes/font_size = 60
+text = "A"
+vertical_alignment = 1

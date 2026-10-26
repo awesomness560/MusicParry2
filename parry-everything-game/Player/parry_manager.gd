@@ -12,7 +12,6 @@ class_name ParryManager
 ##The timer to keep track of the auto-parry grace period
 @export var autoParryTimer : Timer
 ##The reference to the first person animation manager
-@export var fpAnimationManager : ArmsAnimationController
 @export var normalParrySound : AudioStreamPlayer
 @export var perfectParrySound : AudioStreamPlayer
 @export var parryFlash : ColorRect

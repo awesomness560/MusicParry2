@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bcmamjai358yu"]
+
+[ext_resource type="Script" uid="uid://dh4iehh8ymcdm" path="res://Singletons/attack_scheduler.gd" id="1_da4a5"]
+
+[node name="AttackScheduler" type="Node" unique_id=1706948176]
+script = ExtResource("1_da4a5")

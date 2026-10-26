@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://bcqnvuyivfh2p"]
+
+[ext_resource type="Shader" uid="uid://bg5st4qklm140" path="res://Assets/Shaders/attack_indicator.gdshader" id="1_blox4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kxbe4"]
+shader = ExtResource("1_blox4")
+shader_parameter/progress = 0.0
+shader_parameter/morph = 0.0
+shader_parameter/flash = 0.0
+shader_parameter/ghost_color = Color(0.45, 0.22, 0.06, 0.35)
+shader_parameter/fill_color = Color(1, 0.7, 0.22, 1)
+shader_parameter/edge_color = Color(1, 0.97, 0.85, 1)
+shader_parameter/outline_color = Color(0, 0, 0, 0.55)
+shader_parameter/outline_width = 0.025
+shader_parameter/edge_width = 0.05
+shader_parameter/glow_size = 0.07
+shader_parameter/glow_strength = 0.6
+shader_parameter/hash_rotation_deg = 45.0
+shader_parameter/bar_spacing = 0.27
+shader_parameter/bar_half_length = 0.72
+shader_parameter/bar_half_width = 0.055
+shader_parameter/taper_start = 0.4
+shader_parameter/bar_offset = 0.08
+shader_parameter/circle_radius = 0.5
+shader_parameter/arrow_tip = 0.9
+shader_parameter/arrow_height = 0.26
+shader_parameter/arrow_half_width = 0.22
+
+[node name="Indicator1" type="ColorRect" unique_id=1624320626]
+material = SubResource("ShaderMaterial_kxbe4")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -73.0
+offset_top = -73.0
+offset_right = 73.0
+offset_bottom = 73.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

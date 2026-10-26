@@ -5,8 +5,6 @@
 [resource]
 script = ExtResource("1_plc3d")
 parryType = 0
-perfectParryWindow = 0.1
-normalParryWindow = 0.2
 name = "Gravity Parry"
 normalParryPoints = 50.0
 perfectParryPoints = 150.0

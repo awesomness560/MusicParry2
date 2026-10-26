@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dt0a121ikgnsm"]
+
+[ext_resource type="AudioStream" uid="uid://cjdk3y0sxmwko" path="res://Assets/Sounds/demonShot.mp3" id="1_eo7sc"]
+[ext_resource type="Script" uid="uid://dr2lq5fs3qjcc" path="res://Singletons/conductor.gd" id="1_oy3xh"]
+
+[node name="Conductor" type="AudioStreamPlayer" unique_id=726366328]
+stream = ExtResource("1_eo7sc")
+bus = &"Music"
+script = ExtResource("1_oy3xh")

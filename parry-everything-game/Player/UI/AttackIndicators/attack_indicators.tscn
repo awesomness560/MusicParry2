@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://de34wxg3lhdkr"]
+
+[ext_resource type="Script" uid="uid://cuaem8b06kxlc" path="res://Player/UI/AttackIndicators/attack_indicators.gd" id="1_kxbe4"]
+[ext_resource type="PackedScene" uid="uid://bcqnvuyivfh2p" path="res://Player/UI/AttackIndicators/indicator.tscn" id="2_yxng7"]
+
+[node name="AttackIndicators" type="Control" unique_id=153956957]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_kxbe4")
+indicator_scene = ExtResource("2_yxng7")

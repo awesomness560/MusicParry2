@@ -1,0 +1,169 @@
+[gd_scene format=3 uid="uid://biw6l35nbsf6g"]
+
+[ext_resource type="Texture2D" uid="uid://c463ifydem1d6" path="res://Assets/citrus_orchard_road_puresky_4k.exr" id="1_sm2i8"]
+[ext_resource type="AudioStream" uid="uid://8sogqgrivup2" path="res://Assets/Sounds/itsgoingdownnow.mp3" id="2_nvfkh"]
+[ext_resource type="PackedScene" uid="uid://cdltdlvu3ok6r" path="res://Player/player.tscn" id="3_e4n6r"]
+[ext_resource type="Texture2D" uid="uid://b0piuq26dlr0o" path="res://Assets/prototypeTexture1.png" id="4_bftiy"]
+[ext_resource type="Texture2D" uid="uid://b55p6httihlb1" path="res://Assets/prototypeTexture2.png" id="5_wsnx4"]
+[ext_resource type="PackedScene" uid="uid://1b0jwujo5mdm" path="res://Enemies/Laser/laser_enemy.tscn" id="6_lod5r"]
+[ext_resource type="Script" uid="uid://b6xdr0uvh70xn" path="res://Misc/Resources/parryResource.gd" id="7_oknk8"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
+panorama = ExtResource("1_sm2i8")
+energy_multiplier = 0.5
+
+[sub_resource type="Sky" id="Sky_7mycd"]
+sky_material = SubResource("PanoramaSkyMaterial_lquwl")
+
+[sub_resource type="Environment" id="Environment_272bh"]
+background_mode = 2
+sky = SubResource("Sky_7mycd")
+ambient_light_source = 3
+reflected_light_source = 2
+glow_enabled = true
+glow_blend_mode = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_1bvp3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lquwl"]
+albedo_texture = ExtResource("4_bftiy")
+uv1_scale = Vector3(7.545, 7.545, 7.545)
+uv1_triplanar = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7mycd"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_272bh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5vw27"]
+albedo_texture = ExtResource("5_wsnx4")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kek77"]
+
+[sub_resource type="Resource" id="Resource_272bh"]
+resource_local_to_scene = true
+script = ExtResource("7_oknk8")
+damage = 20.0
+perfectParryWindow = 0.2
+normalParryWindow = 0.4
+normalParryPoints = 50.0
+perfectParryPoints = 100.0
+metadata/_custom_type_script = "uid://b6xdr0uvh70xn"
+
+[sub_resource type="Resource" id="Resource_5vw27"]
+resource_local_to_scene = true
+script = ExtResource("7_oknk8")
+damage = 20.0
+perfectParryWindow = 0.2
+normalParryWindow = 0.4
+normalParryPoints = 50.0
+perfectParryPoints = 100.0
+metadata/_custom_type_script = "uid://b6xdr0uvh70xn"
+
+[sub_resource type="Resource" id="Resource_kek77"]
+resource_local_to_scene = true
+script = ExtResource("7_oknk8")
+damage = 20.0
+perfectParryWindow = 0.2
+normalParryWindow = 0.4
+normalParryPoints = 50.0
+perfectParryPoints = 100.0
+metadata/_custom_type_script = "uid://b6xdr0uvh70xn"
+
+[sub_resource type="Resource" id="Resource_4c57u"]
+resource_local_to_scene = true
+script = ExtResource("7_oknk8")
+damage = 20.0
+perfectParryWindow = 0.2
+normalParryWindow = 0.4
+normalParryPoints = 50.0
+perfectParryPoints = 100.0
+metadata/_custom_type_script = "uid://b6xdr0uvh70xn"
+
+[node name="Main" type="Node3D" unique_id=663778735]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=328513810]
+environment = SubResource("Environment_272bh")
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=2024745931]
+stream = ExtResource("2_nvfkh")
+volume_db = -16.888
+autoplay = true
+
+[node name="Player" parent="." unique_id=559422446 instance=ExtResource("3_e4n6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2997768, 13.410364)
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=979706308]
+transform = Transform3D(32.419567, 0, 0, 0, 0.5117212, 0, 0, 0, 32.419567, 0, -0.22969645, -0.811957)
+mesh = SubResource("BoxMesh_1bvp3")
+surface_material_override/0 = SubResource("StandardMaterial3D_lquwl")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor" unique_id=532507969]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D" unique_id=1217998981]
+shape = SubResource("BoxShape3D_7mycd")
+
+[node name="Cube" type="MeshInstance3D" parent="." unique_id=2146122419]
+transform = Transform3D(2.3237407, 0, 0, 0, 2.3237407, 0, 0, 0, 2.3237407, -11.358913, 1.1772532, 4.1574135)
+mesh = SubResource("BoxMesh_272bh")
+surface_material_override/0 = SubResource("StandardMaterial3D_5vw27")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Cube" unique_id=2023901773]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube/StaticBody3D" unique_id=735691652]
+shape = SubResource("BoxShape3D_kek77")
+
+[node name="Floor2" type="MeshInstance3D" parent="." unique_id=889678315]
+transform = Transform3D(32.419567, 0, 0, 0, 0.5117212, 0, 0, 0, 32.419567, 0, -0.22969645, -115.781204)
+mesh = SubResource("BoxMesh_1bvp3")
+surface_material_override/0 = SubResource("StandardMaterial3D_lquwl")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor2" unique_id=848199178]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor2/StaticBody3D" unique_id=1142523195]
+shape = SubResource("BoxShape3D_7mycd")
+
+[node name="Floor3" type="MeshInstance3D" parent="." unique_id=1167105308]
+transform = Transform3D(6.476833, 0, 0, 0, 0.51172096, 0, 0, 0, 11.7480955, -24.74513, -0.22969645, -38.315845)
+mesh = SubResource("BoxMesh_1bvp3")
+surface_material_override/0 = SubResource("StandardMaterial3D_lquwl")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor3" unique_id=429511245]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor3/StaticBody3D" unique_id=1629940977]
+shape = SubResource("BoxShape3D_7mycd")
+
+[node name="Floor4" type="MeshInstance3D" parent="." unique_id=1152318157]
+transform = Transform3D(7.985944, 0, 0, 0, 0.5117212, 0, 0, 0, 13.452807, 5.568491, 0.033666432, -60.042538)
+mesh = SubResource("BoxMesh_1bvp3")
+surface_material_override/0 = SubResource("StandardMaterial3D_lquwl")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor4" unique_id=2031400649]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor4/StaticBody3D" unique_id=1315022504]
+shape = SubResource("BoxShape3D_7mycd")
+
+[node name="Floor5" type="MeshInstance3D" parent="." unique_id=1563100078]
+transform = Transform3D(32.419567, 0, 0, 0, 0.5117212, 0, 0, 0, 32.419567, 0, -0.22969645, -205.80269)
+mesh = SubResource("BoxMesh_1bvp3")
+surface_material_override/0 = SubResource("StandardMaterial3D_lquwl")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor5" unique_id=1830326229]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor5/StaticBody3D" unique_id=1612006788]
+shape = SubResource("BoxShape3D_7mycd")
+
+[node name="LaserEnemy" parent="." unique_id=1303688957 instance=ExtResource("6_lod5r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.646812, 5.5750523, -57.417747)
+parryResource = SubResource("Resource_272bh")
+
+[node name="LaserEnemy3" parent="." unique_id=1584242521 instance=ExtResource("6_lod5r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.607315, 5.5750523, -38.83258)
+parryResource = SubResource("Resource_5vw27")
+
+[node name="LaserEnemy2" parent="." unique_id=1312958583 instance=ExtResource("6_lod5r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.995386, 5.5750523, -132.77379)
+parryResource = SubResource("Resource_kek77")
+
+[node name="LaserEnemy4" parent="." unique_id=1494507525 instance=ExtResource("6_lod5r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.995386, 5.5750523, -196.92441)
+parryResource = SubResource("Resource_4c57u")

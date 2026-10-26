@@ -7,3 +7,6 @@ var currentMovementState : MOVEMENT_STATE
 
 @export var camera : Camera3D
 @export var inFrontCameraNode : Node3D
+
+func _ready() -> void:
+	Globals.player = self
