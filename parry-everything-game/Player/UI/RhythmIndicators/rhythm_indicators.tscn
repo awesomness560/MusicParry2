@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://dngu04l7xt6di"]
+
+[ext_resource type="Script" uid="uid://b31xmb6f184y3" path="res://Player/UI/RhythmIndicators/rhythm_indicators.gd" id="1_ob4o6"]
+[ext_resource type="Shader" uid="uid://dj4t0xkytov2a" path="res://Player/UI/RhythmIndicators/rhythm_indicators.gdshader" id="2_at5n0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qg41d"]
+shader = ExtResource("2_at5n0")
+shader_parameter/flash = 0.0
+shader_parameter/pulse = 0.0
+shader_parameter/color = Color(1, 1, 1, 0.85)
+shader_parameter/flash_color = Color(1, 0.9, 0.6, 1)
+shader_parameter/outline_color = Color(0, 0, 0, 0.5)
+shader_parameter/ring_radius = 0.4
+shader_parameter/ring_width = 0.06
+shader_parameter/dot_radius = 0.06
+shader_parameter/tick_length = 0.14
+shader_parameter/tick_width = 0.05
+shader_parameter/tick_gap = 0.05
+shader_parameter/outline_width = 0.035
+shader_parameter/pulse_amount = 0.08
+shader_parameter/wave_reach = 0.45
+
+[node name="RhythmIndicators" type="Control" unique_id=760510652 node_paths=PackedStringArray("crosshair")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_ob4o6")
+crosshair = NodePath("CrossHair")
+start_mode = 1
+
+[node name="CrossHair" type="ColorRect" parent="." unique_id=1866677245]
+material = SubResource("ShaderMaterial_qg41d")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
