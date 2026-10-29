@@ -58,6 +58,7 @@ var _cross_mat: ShaderMaterial
 func _ready() -> void:
 	set_anchors_preset(PRESET_FULL_RECT)
 	mouse_filter = MOUSE_FILTER_IGNORE
+	CombatResolver.attack_resolved.connect(_on_attack_resolved)
 	AttackScheduler.attack_booked.connect(_on_booked)
 	AttackScheduler.attack_cancelled.connect(_on_cancelled)
 	Conductor.time_jumped.connect(func(_t): _notes.clear())
@@ -68,6 +69,10 @@ func _ready() -> void:
 
 
 # ---------------------------------------------------------------- scheduler events
+
+func _on_attack_resolved(res: AttackResult) -> void:
+	if res.is_parry() and is_visible_in_tree():
+		_flash = 1.0
 
 func _on_booked(r: AttackRequest) -> void:
 	if not is_visible_in_tree():
@@ -115,7 +120,6 @@ func _process(delta: float) -> void:
 				if now >= n.request.impact_time:
 					n.state = State.HIT
 					n.t = 0.0
-					_flash = 1.0
 			State.HIT:
 				n.t += delta
 				if n.t >= hit_time:

@@ -30,7 +30,6 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_ob4o6")
 crosshair = NodePath("CrossHair")
-start_mode = 1
 
 [node name="CrossHair" type="ColorRect" parent="." unique_id=1866677245]
 material = SubResource("ShaderMaterial_qg41d")

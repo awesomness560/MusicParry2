@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://78uq5vk7y7w7"]
+
+[ext_resource type="Script" uid="uid://bttiknqdntumi" path="res://Singletons/damage_numbers.gd" id="1_yid1s"]
+[ext_resource type="FontFile" uid="uid://c4r6t74eki7bg" path="res://Assets/UI/Kanit-ExtraBoldItalic.ttf" id="2_ay4s7"]
+
+[node name="DamageNumbers" type="Node3D" unique_id=1973644321]
+script = ExtResource("1_yid1s")
+font = ExtResource("2_ay4s7")
+font_size = 256

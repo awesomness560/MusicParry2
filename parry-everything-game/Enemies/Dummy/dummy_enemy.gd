@@ -1,12 +1,14 @@
 extends Node3D
 
 @export var attack_indicator: Marker3D
-@export var mesh: MeshInstance3D               # what flashes on results
+@export var mesh: MeshInstance3D  # what flashes on results
+@export var healthNode: HealthManager
+@export var death_particles: GPUParticles3D
 
 @export_group("Attack")
 @export var auto_attack := true
-@export var attack_cooldown := 0.6             # seconds after an attack lands before requesting again
-@export var lead_time := 0.8                   # seconds from windup start to impact
+@export var attack_cooldown := 0.6  # seconds after an attack lands before requesting again
+@export var lead_time := 0.8  # seconds from windup start to impact
 @export var priority := 0.0
 @export var max_wait_beats := 8
 @export var attack_kind: StringName = &"melee"
@@ -16,8 +18,8 @@ extends Node3D
 @export var cancel_key: Key = KEY_C
 
 @export_group("Flash")
-@export var parried_color := Color(1.0, 0.1, 0.1)   # got parried: stand-in for taking damage
-@export var hit_color := Color(1.0, 0.6, 0.1)       # landed a hit on the player
+@export var parried_color := Color(1.0, 0.1, 0.1)  # got parried: stand-in for taking damage
+@export var hit_color := Color(1.0, 0.6, 0.1)  # landed a hit on the player
 @export var flash_time := 0.25
 
 var _req: AttackRequest
@@ -30,6 +32,8 @@ var _flash := 0.0
 
 
 func _ready() -> void:
+	healthNode.died.connect(_on_death)
+
 	Globals.temp_enemy_marker = attack_indicator
 	_base_scale = mesh.scale
 	CombatResolver.attack_resolved.connect(_on_attack_resolved)
@@ -45,6 +49,7 @@ func _ready() -> void:
 
 # ---------------------------------------------------------------- range
 
+
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is Player:
 		_player_in_range = true
@@ -54,11 +59,18 @@ func _on_area_3d_body_exited(body: Node3D) -> void:
 	if body is Player:
 		_player_in_range = false
 		# withdraw if we haven't started swinging yet; mid-windup we're committed
-		if _req and (_req.state == AttackRequest.State.PENDING or _req.state == AttackRequest.State.BOOKED):
+		if (
+			_req
+			and (
+				_req.state == AttackRequest.State.PENDING
+				or _req.state == AttackRequest.State.BOOKED
+			)
+		):
 			AttackScheduler.cancel(_req, "out_of_range")
 
 
 # ---------------------------------------------------------------- input
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	var key := event as InputEventKey
@@ -71,6 +83,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 # ---------------------------------------------------------------- attacking
+
 
 func _request_attack() -> void:
 	if _req and _req.is_live():
@@ -103,6 +116,13 @@ func _on_impact(_lateness: float) -> void:
 	_next_attack_time = Conductor.song_time + attack_cooldown
 
 
+func _on_death():
+	mesh.hide()
+	death_particles.emitting = true
+	await death_particles.finished
+	queue_free()
+
+
 func _on_cancelled(reason: String) -> void:
 	print("[%s] cancelled: %s" % [name, reason])
 	_next_attack_time = Conductor.song_time + attack_cooldown
@@ -112,6 +132,7 @@ func _on_cancelled(reason: String) -> void:
 func _on_attack_resolved(res: AttackResult) -> void:
 	if res.request.attacker != self:
 		return
+	healthNode.take_damage(10, res)
 	match res.outcome:
 		AttackResult.Outcome.PERFECT_PARRY, AttackResult.Outcome.PARRY:
 			print("[%s] got %s'd  (%+.0f ms)" % [name, res.outcome_name(), res.offset * 1000.0])
@@ -123,9 +144,14 @@ func _on_attack_resolved(res: AttackResult) -> void:
 
 # ---------------------------------------------------------------- per frame
 
+
 func _process(delta: float) -> void:
-	if auto_attack and _player_in_range and not (_req and _req.is_live()) \
-			and Conductor.song_time >= _next_attack_time:
+	if (
+		auto_attack
+		and _player_in_range
+		and not (_req and _req.is_live())
+		and Conductor.song_time >= _next_attack_time
+	):
 		_request_attack()
 
 	# crouch down during the windup, spring up big on impact

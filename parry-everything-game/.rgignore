@@ -1,0 +1,4 @@
+*.uid
+*.import
+.godot/
+*.translation

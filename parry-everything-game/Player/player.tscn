@@ -4,10 +4,15 @@
 [ext_resource type="Script" uid="uid://dyupldqyre7xm" path="res://Player/player_look.gd" id="2_4ntmi"]
 [ext_resource type="Script" uid="uid://b6vu1mmrrmcg7" path="res://Player/player_movement.gd" id="3_btcbx"]
 [ext_resource type="Script" uid="uid://8ehx8qutulsk" path="res://Player/arms_animation_control.gd" id="3_k53q1"]
+[ext_resource type="Shader" uid="uid://bmytxr6qjh6f7" path="res://Assets/Shaders/spinning_knife.gdshader" id="5_76lrf"]
 [ext_resource type="PackedScene" uid="uid://7pxusfq21p5b" path="res://Assets/first_person_animations_baked.glb" id="5_n471f"]
-[ext_resource type="Resource" uid="uid://bxabapcwrol7i" path="res://Misc/Resources/GroundContact.tres" id="6_vtle1"]
-[ext_resource type="Resource" uid="uid://c6n7pya7giofy" path="res://Misc/Resources/Gravity.tres" id="7_gu6f8"]
+[ext_resource type="Script" uid="uid://bknre81mxs0ti" path="res://Player/spinning_knife.gd" id="6_efx54"]
+[ext_resource type="Script" uid="uid://bdv85vjhq0bw3" path="res://Player/air_budget.gd" id="6_o28un"]
+[ext_resource type="Script" uid="uid://b74gcbshq6ery" path="res://Player/states/ground_state.gd" id="7_n471f"]
 [ext_resource type="AudioStream" uid="uid://dm8lqcp7xvahm" path="res://Assets/Sounds/normalParry.mp3" id="8_00tjw"]
+[ext_resource type="Script" uid="uid://blodngq1rfbb0" path="res://Player/states/air_state.gd" id="8_7emwf"]
+[ext_resource type="Script" uid="uid://b3sovbkolbipv" path="res://Player/states/wallrun_state.gd" id="8_gpjlu"]
+[ext_resource type="Script" uid="uid://dw5ix6wwt5sif" path="res://Player/states/dash_state.gd" id="8_hshwv"]
 [ext_resource type="AudioStream" uid="uid://dg5cji4e4lp4b" path="res://Assets/Sounds/perfectParry.mp3" id="9_x3vf3"]
 [ext_resource type="Script" uid="uid://ycxd34qryoel" path="res://Player/hud.gd" id="10_x3vf3"]
 [ext_resource type="Shader" uid="uid://c7s2rxd036vgv" path="res://Assets/Shaders/black_bars.gdshader" id="11_apopc"]
@@ -17,10 +22,48 @@
 [ext_resource type="Script" uid="uid://cr80ol4xw22bx" path="res://Player/UI/beat_pulse.gd" id="16_b1ygp"]
 [ext_resource type="Script" uid="uid://bllr716ubwgxn" path="res://Player/speedrun_timer.gd" id="16_lfmf2"]
 [ext_resource type="PackedScene" uid="uid://de34wxg3lhdkr" path="res://Player/UI/AttackIndicators/attack_indicators.tscn" id="16_pisgm"]
+[ext_resource type="Script" uid="uid://de42b3hk1erre" path="res://Player/UI/movement_stats.gd" id="17_7emwf"]
 [ext_resource type="PackedScene" uid="uid://dngu04l7xt6di" path="res://Player/UI/RhythmIndicators/rhythm_indicators.tscn" id="17_n471f"]
 [ext_resource type="Script" uid="uid://cext84m5qy4w5" path="res://Player/player_defense.gd" id="18_b1ygp"]
+[ext_resource type="Shader" uid="uid://cd7topc40trwi" path="res://Assets/Shaders/dash_fisheye.gdshader" id="21_8mwp6"]
+[ext_resource type="Shader" uid="uid://cfc6vst38nrm5" path="res://Assets/Shaders/dash_bar.gdshader" id="22_qemgg"]
+[ext_resource type="Script" uid="uid://co1bvj74sck37" path="res://Player/UI/Dash/dash_effect.gd" id="22_sm0op"]
+[ext_resource type="Script" uid="uid://1sywtngaal6h" path="res://Player/UI/Dash/dash_meter.gd" id="24_76lrf"]
+[ext_resource type="Script" uid="uid://burya76gmv2h" path="res://Player/player_tricks.gd" id="30_755ss"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hvfyp"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_qg41d"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nq5bd"]
+render_priority = 0
+shader = ExtResource("5_76lrf")
+shader_parameter/intensity = 1.0
+shader_parameter/speed = 1.0
+shader_parameter/spin_angle = 0.0
+shader_parameter/direction = 1.0
+shader_parameter/blade_angle_deg = 0.0
+shader_parameter/blade_inner = 0.12
+shader_parameter/blade_outer = 0.98
+shader_parameter/blade_width = 0.07
+shader_parameter/handle_inner = 0.05
+shader_parameter/handle_outer = 0.45
+shader_parameter/handle_width = 0.06
+shader_parameter/blade_color = Color(0.75, 0.77, 0.82, 1)
+shader_parameter/handle_color = Color(0.12, 0.1, 0.09, 1)
+shader_parameter/knife_opacity = 0.9
+shader_parameter/smear_arc = 2.6
+shader_parameter/handle_strength = 0.35
+shader_parameter/edge_softness = 0.04
+shader_parameter/smear_color = Color(0.8, 0.84, 0.9, 1)
+shader_parameter/tip_color = Color(1, 1, 1, 1)
+shader_parameter/smear_opacity = 0.55
+shader_parameter/streak_count = 14.0
+shader_parameter/streak_strength = 0.5
+shader_parameter/glint_angle = 0.8
+shader_parameter/glint_strength = 0.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_755ss"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5htga"]
 shader = ExtResource("11_apopc")
@@ -55,6 +98,35 @@ shader_parameter/vignette_strength = 1.0
 shader_parameter/dither_strength = 0.03
 shader_parameter/vignette_color = Color(0, 0, 0, 1)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gpjlu"]
+shader = ExtResource("21_8mwp6")
+shader_parameter/intensity = 0.0
+shader_parameter/bulge = 0.35
+shader_parameter/zoom = 0.05
+shader_parameter/streak = 0.05
+shader_parameter/aberration = 0.015
+shader_parameter/tint = Color(0.35, 0.7, 1, 1)
+shader_parameter/tint_center = 0.15
+shader_parameter/tint_edge = 0.75
+shader_parameter/vignette = 0.35
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qemgg"]
+shader = ExtResource("22_qemgg")
+shader_parameter/rect_size = Vector2(120, 16)
+shader_parameter/fill = 1.0
+shader_parameter/usable = 1.0
+shader_parameter/pop = 0.0
+shader_parameter/hold = 0.0
+shader_parameter/pulse = 0.0
+shader_parameter/track_color = Color(1, 1, 1, 0.12)
+shader_parameter/charge_color = Color(0.55, 0.62, 0.75, 0.55)
+shader_parameter/ready_color = Color(0.4, 0.8, 1, 0.95)
+shader_parameter/hold_color = Color(1, 0.82, 0.4, 1)
+shader_parameter/bar_width = 0.8
+shader_parameter/bar_height = 0.35
+shader_parameter/pop_swell = 0.15
+shader_parameter/glow_strength = 0.5
+
 [node name="Player" type="CharacterBody3D" unique_id=559422446 node_paths=PackedStringArray("camera", "inFrontCameraNode")]
 script = ExtResource("1_gwnis")
 camera = NodePath("CameraRoot/CameraTilt/ViewBobbing/Camera3D")
@@ -63,15 +135,15 @@ inFrontCameraNode = NodePath("CameraRoot/CameraTilt/ViewBobbing/Camera3D/InFront
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=27199856]
 shape = SubResource("CapsuleShape3D_hvfyp")
 
-[node name="CameraRoot" type="Node3D" parent="." unique_id=2075988183 node_paths=PackedStringArray("playerNode", "camera", "viewBobbingNode", "cameraTiltNode", "fallingDisplacementNode")]
+[node name="CameraRoot" type="Node3D" parent="." unique_id=2075988183 node_paths=PackedStringArray("playerNode", "camera", "movement", "cameraTiltNode", "viewBobbingNode", "fallingDisplacementNode")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.035, 0, -0.18)
 script = ExtResource("2_4ntmi")
 playerNode = NodePath("..")
 camera = NodePath("CameraTilt/ViewBobbing/Camera3D")
-viewBobbingNode = NodePath("CameraTilt/ViewBobbing")
+movement = NodePath("../PlayerMovement")
 cameraTiltNode = NodePath("CameraTilt")
+viewBobbingNode = NodePath("CameraTilt/ViewBobbing")
 fallingDisplacementNode = NodePath("FallingDisplacement")
-fallingTweenTime = 0.8
 
 [node name="CameraTilt" type="Node3D" parent="CameraRoot" unique_id=1903234394]
 
@@ -85,11 +157,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.307332)
 
 [node name="FallingDisplacement" type="Node3D" parent="CameraRoot" unique_id=141526293]
 
-[node name="Arms" type="Node3D" parent="CameraRoot/FallingDisplacement" unique_id=622086343 node_paths=PackedStringArray("anim", "defense", "normalParrySound", "perfectParrySound")]
+[node name="Arms" type="Node3D" parent="CameraRoot/FallingDisplacement" unique_id=622086343 node_paths=PackedStringArray("anim", "defense", "movement", "tricks", "knife_spin", "normalParrySound", "perfectParrySound")]
 transform = Transform3D(-1.705, 0, -1.4905584e-07, 0, 1.705, 0, 1.4905584e-07, 0, -1.705, 0.035, 0, 0.18)
 script = ExtResource("3_k53q1")
 anim = NodePath("first_person_animations_baked/AnimationPlayer")
 defense = NodePath("../../../PlayerDefense")
+movement = NodePath("../../../PlayerMovement")
+tricks = NodePath("../../../PlayerTricks")
+knife_spin = NodePath("first_person_animations_baked/Arms_Rig/Skeleton3D/Knife_2/SpinningKnife")
 normalParrySound = NodePath("../../../NormalParry")
 perfectParrySound = NodePath("../../../PerfectParry")
 parry_fail_clip = &"FP_Parry_Knife_Fail"
@@ -97,17 +172,103 @@ parry_success_clip = &"FP_Parry_Knife_Sucess"
 
 [node name="first_person_animations_baked" parent="CameraRoot/FallingDisplacement/Arms" unique_id=1264855571 instance=ExtResource("5_n471f")]
 
-[node name="PlayerMovement" type="Node" parent="." unique_id=2063233654 node_paths=PackedStringArray("body", "vignetteColorRect", "camera_controller")]
+[node name="Skeleton3D" parent="CameraRoot/FallingDisplacement/Arms/first_person_animations_baked/Arms_Rig" parent_id_path=PackedInt32Array(1264855571, 459386658) index="0" unique_id=1461330557]
+bones/0/position = Vector3(-0.16105922, -0.14288472, 0.41989025)
+bones/0/rotation = Quaternion(-0.13229118, -0.11162177, 0.66959774, 0.72227323)
+bones/3/position = Vector3(0.18393594, -0.28185678, -0.24542105)
+bones/3/rotation = Quaternion(-0.16667143, 0.70203227, 0.59800357, 0.34894583)
+bones/4/position = Vector3(-0.24597198, -0.13598143, 0.3614115)
+bones/4/rotation = Quaternion(-0.07951391, -0.701064, -0.7054603, -0.06717646)
+bones/5/position = Vector3(0.7073597, -0.25677955, -0.12643266)
+bones/9/rotation = Quaternion(0.20985536, 0.2835323, -0.85297453, 0.38471368)
+bones/10/rotation = Quaternion(1.6309416e-09, 1.2754832e-08, -0.7859184, 0.6183303)
+bones/11/rotation = Quaternion(0.681435, 0.61630577, -0.03954778, 0.39274612)
+bones/12/rotation = Quaternion(-0.63936913, 1.6351745e-08, -8.478685e-09, 0.7689)
+bones/13/rotation = Quaternion(-0.6393691, 1.0295559e-08, -4.360464e-08, 0.7689)
+bones/14/rotation = Quaternion(-0.6393693, 4.273412e-08, -4.265191e-08, 0.7688998)
+bones/15/rotation = Quaternion(-0.6393693, -4.6347512e-08, 4.8929056e-08, 0.7688998)
+bones/16/rotation = Quaternion(-0.63936913, 1.6351745e-08, -8.478685e-09, 0.7689)
+bones/17/rotation = Quaternion(-0.6393691, 1.0295559e-08, -4.360464e-08, 0.7689)
+bones/18/rotation = Quaternion(-0.63936937, -1.1909179e-09, -3.4127763e-09, 0.7688998)
+bones/19/rotation = Quaternion(-0.63936913, -2.4224803e-08, -4.8449607e-08, 0.7689)
+bones/20/rotation = Quaternion(-0.63936913, 2.9373846e-08, -2.6086349e-08, 0.7689)
+bones/21/rotation = Quaternion(-0.63936913, 3.0406966e-10, -2.7297576e-08, 0.7689)
+bones/22/rotation = Quaternion(-0.63936913, -5.6879305e-08, 3.2889957e-08, 0.7689)
+bones/23/rotation = Quaternion(-0.63936937, 1.9366823e-08, 1.2128077e-08, 0.7688998)
+bones/24/rotation = Quaternion(-0.63936913, 1.6351745e-08, -8.478685e-09, 0.7689)
+bones/25/rotation = Quaternion(-0.6393691, 1.0295559e-08, -4.360464e-08, 0.7689)
+bones/26/rotation = Quaternion(-0.63936925, 3.128517e-09, 7.368527e-09, 0.76889986)
+bones/27/rotation = Quaternion(-0.63936925, 9.150183e-09, -5.945355e-08, 0.76889986)
+bones/28/rotation = Quaternion(-0.14691699, 0.53775054, -0.49105024, 0.6694098)
+bones/29/rotation = Quaternion(-0.5182343, -4.3558486e-09, 1.0617381e-08, 0.8552387)
+bones/30/rotation = Quaternion(-0.5182343, 1.8771208e-07, -3.4114595e-07, 0.8552387)
+bones/31/rotation = Quaternion(-0.1469169, 0.5377505, -0.49105042, 0.6694097)
+bones/32/rotation = Quaternion(-0.3838363, 0.44546556, 0.7401027, 0.32631016)
+bones/33/rotation = Quaternion(-1.1849816e-08, 6.546834e-09, 0.76641995, 0.64233994)
+bones/34/rotation = Quaternion(0.06441202, -0.28046966, -0.32138714, 0.902163)
+bones/35/rotation = Quaternion(-0.71055305, -3.0207565e-09, 6.9938184e-09, 0.7036437)
+bones/36/rotation = Quaternion(-0.71055305, -2.9828684e-08, 2.393822e-08, 0.7036436)
+bones/37/rotation = Quaternion(-0.71055305, -4.7064503e-08, 4.213473e-08, 0.7036436)
+bones/38/rotation = Quaternion(-0.71055305, 4.053404e-08, -4.0967326e-08, 0.7036437)
+bones/39/rotation = Quaternion(-0.71055305, -3.0207565e-09, 6.9938184e-09, 0.7036437)
+bones/40/rotation = Quaternion(-0.71055305, -2.9828684e-08, 2.393822e-08, 0.7036436)
+bones/41/rotation = Quaternion(-0.71055305, -1.400292e-09, 2.2835498e-09, 0.7036437)
+bones/42/rotation = Quaternion(-0.71055305, 1.0014576e-08, 9.379705e-09, 0.7036436)
+bones/43/rotation = Quaternion(-0.71055305, -2.1766459e-08, 2.508082e-08, 0.7036437)
+bones/44/rotation = Quaternion(-0.71055305, -3.0224573e-08, 2.3918599e-08, 0.7036436)
+bones/45/rotation = Quaternion(-0.71055305, -7.0128845e-09, 7.0664052e-09, 0.7036437)
+bones/46/rotation = Quaternion(-0.71055305, 1.7757341e-09, -2.379748e-09, 0.7036437)
+bones/47/rotation = Quaternion(-0.71055305, -3.0207565e-09, 6.9938184e-09, 0.7036437)
+bones/48/rotation = Quaternion(-0.71055305, -2.9828684e-08, 2.393822e-08, 0.7036436)
+bones/49/rotation = Quaternion(-0.71055305, -1.6520614e-08, 1.2369223e-08, 0.7036437)
+bones/50/rotation = Quaternion(-0.71055305, -1.3097514e-08, 1.2330403e-09, 0.7036437)
+bones/51/rotation = Quaternion(-0.16604699, -0.63685155, 0.4422825, 0.6092903)
+bones/52/rotation = Quaternion(-0.6434243, 2.3115483e-08, -6.0830224e-08, 0.7655098)
+bones/53/rotation = Quaternion(-0.6434243, -2.9794617e-07, 2.6616647e-07, 0.7655098)
+bones/54/rotation = Quaternion(-0.16604705, -0.63685143, 0.44228268, 0.60929036)
+
+[node name="Knife_2" parent="CameraRoot/FallingDisplacement/Arms/first_person_animations_baked/Arms_Rig/Skeleton3D" index="0" unique_id=135371517]
+transform = Transform3D(0.07835895, -0.9377318, -0.33840656, 0.9967981, 0.06827587, 0.04161738, -0.015920922, -0.3405841, 0.9400793, -0.16105922, -0.14288472, 0.41989025)
+
+[node name="SpinningKnife" type="MeshInstance3D" parent="CameraRoot/FallingDisplacement/Arms/first_person_animations_baked/Arms_Rig/Skeleton3D/Knife_2" index="1" unique_id=1549469719 node_paths=PackedStringArray("held_knife")]
+transform = Transform3D(0.02405423, 0.115594625, -0.3557396, 0.33711797, -0.012592539, 0.023967084, -0.004107997, -0.35651726, -0.11618904, -0.021751478, 0.116117, -0.005309105)
+mesh = SubResource("QuadMesh_qg41d")
+surface_material_override/0 = SubResource("ShaderMaterial_nq5bd")
+script = ExtResource("6_efx54")
+held_knife = NodePath("../Knife")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CameraRoot/FallingDisplacement/Arms" unique_id=217785001]
+shape = SubResource("BoxShape3D_755ss")
+
+[node name="PlayerMovement" type="Node" parent="." unique_id=2063233654 node_paths=PackedStringArray("body", "camera_controller", "defense", "air_budget", "vignetteColorRect", "ground", "air", "dash", "wallrun")]
 script = ExtResource("3_btcbx")
 body = NodePath("..")
-vignetteColorRect = NodePath("../HUD/Vingette")
 camera_controller = NodePath("../CameraRoot")
-groundParryResource = ExtResource("6_vtle1")
-gravityParryResource = ExtResource("7_gu6f8")
-acceleration = 18.94
-friction = 24.165
+defense = NodePath("../PlayerDefense")
+air_budget = NodePath("AirBudget")
+vignetteColorRect = NodePath("../HUD/Vingette")
+ground = NodePath("GroundState")
+air = NodePath("AirState")
+dash = NodePath("DashState")
+wallrun = NodePath("WallrunState")
+jump_height = 3.0
 
 [node name="GravityAudioCue" type="AudioStreamPlayer" parent="PlayerMovement" unique_id=2001744799]
+
+[node name="AirBudget" type="Node" parent="PlayerMovement" unique_id=1778822075]
+script = ExtResource("6_o28un")
+
+[node name="GroundState" type="Node" parent="PlayerMovement" unique_id=581711342]
+script = ExtResource("7_n471f")
+
+[node name="WallrunState" type="Node" parent="PlayerMovement" unique_id=975228931]
+script = ExtResource("8_gpjlu")
+
+[node name="DashState" type="Node" parent="PlayerMovement" unique_id=2006637371]
+script = ExtResource("8_hshwv")
+
+[node name="AirState" type="Node" parent="PlayerMovement" unique_id=845485984]
+script = ExtResource("8_7emwf")
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1313475167 node_paths=PackedStringArray("blackBars")]
 script = ExtResource("10_x3vf3")
@@ -178,6 +339,52 @@ visible = false
 
 [node name="RhythmIndicators" parent="HUD" unique_id=760510652 instance=ExtResource("17_n471f")]
 
+[node name="Stats" type="Label" parent="HUD" unique_id=2146281672 node_paths=PackedStringArray("movement")]
+visible = false
+offset_right = 246.0
+offset_bottom = 291.0
+script = ExtResource("17_7emwf")
+movement = NodePath("../../PlayerMovement")
+
+[node name="DashEffects" type="Control" parent="HUD" unique_id=256497283]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Fisheye" type="ColorRect" parent="HUD/DashEffects" unique_id=235516116 node_paths=PackedStringArray("source")]
+material = SubResource("ShaderMaterial_gpjlu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("22_sm0op")
+source = NodePath("../../../PlayerMovement")
+
+[node name="DashMeter" type="ColorRect" parent="HUD/DashEffects" unique_id=729757605 node_paths=PackedStringArray("source")]
+material = SubResource("ShaderMaterial_qemgg")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 26.0
+offset_right = 20.0
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("24_76lrf")
+source = NodePath("../../../PlayerMovement")
+
 [node name="PlayerDefense" type="Node" parent="." unique_id=834308276 node_paths=PackedStringArray("normalParrySound", "perfectParrySound")]
 script = ExtResource("18_b1ygp")
 normalParrySound = NodePath("../NormalParry")
@@ -189,6 +396,10 @@ stream = ExtResource("8_00tjw")
 [node name="PerfectParry" type="AudioStreamPlayer" parent="." unique_id=442353358]
 process_mode = 3
 stream = ExtResource("9_x3vf3")
+
+[node name="PlayerTricks" type="Node" parent="." unique_id=65249200 node_paths=PackedStringArray("defense")]
+script = ExtResource("30_755ss")
+defense = NodePath("../PlayerDefense")
 
 [connection signal="tilt" from="PlayerMovement" to="CameraRoot" method="tilt"]
 
